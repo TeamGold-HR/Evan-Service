@@ -68,6 +68,12 @@ const seed = (month) => {
     }
 }
 
+seed(3);
+
+setTimeout(() => {
+    db.connection.end()
+}, 2000);
+
 module.exports = {
     seed
 }

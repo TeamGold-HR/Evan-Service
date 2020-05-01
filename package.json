@@ -8,7 +8,9 @@
   },
   "scripts": {
     "start": "node server/index.js",
-    "dev:react": "webpack -d --watch"
+    "dev:react": "webpack -d --watch",
+    "clear": "node server/scripts/clear.js",
+    "seed": "node server/scripts/seed.js"
   },
   "dependencies": {
     "@babel/polyfill": "^7.8.7",

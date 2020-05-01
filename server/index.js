@@ -8,8 +8,6 @@ const seed = require('./scripts/seed.js');
 
 app.use(express.json())
 
-seed.seed(3);
-
 app.use('/', express.static(path.join(__dirname, '../public')))
 
 app.listen(PORT, function() {

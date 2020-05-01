@@ -13,6 +13,10 @@ const clearOut = () => {
     };
 }
 
+clearOut();
+
+db.connection.end();
+
 module.exports = {
     clearOut
 }
