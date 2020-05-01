@@ -1,17 +1,40 @@
 {
-  "name": "",
-  "version": "",
+  "name": "fec",
   "description": "",
   "author": "",
-  "license": "",
+  "license": "ISC",
   "engines": {
     "node": ">=6.13.0"
   },
   "scripts": {
+    "start": "node server/index.js",
+    "dev:react": "webpack -d --watch"
   },
   "dependencies": {
+    "@babel/polyfill": "^7.8.7",
+    "express": "^4.17.1",
+    "mysql": "^2.18.1",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1"
   },
   "devDependencies": {
-    "eslint-config-hackreactor": "git://github.com/reactorcore/eslint-config-hackreactor"
-  }
+    "@babel/cli": "^7.8.4",
+    "@babel/core": "^7.9.6",
+    "@babel/preset-env": "^7.9.6",
+    "@babel/preset-react": "^7.9.4",
+    "babel-loader": "^8.1.0",
+    "eslint-config-hackreactor": "git://github.com/reactorcore/eslint-config-hackreactor.git",
+    "webpack": "^4.43.0",
+    "webpack-cli": "^3.3.11"
+  },
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TeamGold-HR/Evan-Service-Reservations.git"
+  },
+  "bugs": {
+    "url": "https://github.com/TeamGold-HR/Evan-Service-Reservations/issues"
+  },
+  "homepage": "https://github.com/TeamGold-HR/Evan-Service-Reservations#readme"
 }
