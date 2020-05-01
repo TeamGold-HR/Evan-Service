@@ -1,15 +1,37 @@
 const express = require('express');
+
 const app = express();
 const path = require('path');
-const PORT  = 3001;
+
+const PORT = 3002;
 const db = require('../database/index.js');
-const seed = require('./scripts/seed.js');
 
 
-app.use(express.json())
+app.use(express.json());
 
-app.use('/', express.static(path.join(__dirname, '../public')))
+app.use('/', express.static(path.join(__dirname, '../public')));
 
-app.listen(PORT, function() {
-    console.log('WOW WOW 3000');
-})
+app.get('/listingInfo/:listingId', (req, res) => {
+  console.log('ping recieved');
+  const queryStatement = `SELECT DISTINCT
+                    listings.url_id,
+                    dates.calendar_date, dates.is_available,
+                    fees.base_rent, fees.service_fees, fees.cleaning, fees.occupancy,
+                    occupants.adults, occupants.children, occupants.infants, occupants.non_infants
+                    FROM dates, fees, occupants, listings
+                    WHERE listings.url_id = 1
+                    AND dates.listing_id = listings.url_id
+                    AND fees.listing_id = listings.url_id
+                    AND occupants.listing_id = listings.url_id`;
+  db.connection.query(queryStatement, (err, result) => {
+    if (err) {
+      res.send(500);
+    } else {
+      res.send(result);
+    }
+  });
+});
+
+app.listen(PORT, () => {
+  console.log('WOW WOW 3000');
+});
