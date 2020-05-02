@@ -9,7 +9,7 @@ const db = require('../database/index.js');
 
 app.use(express.json());
 
-// app.use('/', express.static(path.join(__dirname, '../public')));
+app.use('/', express.static(path.join(__dirname, '../public')));
 app.use('/:listingId', express.static(path.join(__dirname, '../public')));
 
 app.get('/list/:listingId', (req, res) => {
