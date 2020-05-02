@@ -9,9 +9,10 @@ const db = require('../database/index.js');
 
 app.use(express.json());
 
-app.use('/', express.static(path.join(__dirname, '../public')));
+// app.use('/', express.static(path.join(__dirname, '../public')));
+app.use('/:listingId', express.static(path.join(__dirname, '../public')));
 
-app.get('/:listingId', (req, res) => {
+app.get('/list/:listingId', (req, res) => {
   console.log('ping recieved');
   const queryStatement = `SELECT DISTINCT
                     listings.url_id,
@@ -19,11 +20,12 @@ app.get('/:listingId', (req, res) => {
                     fees.base_rent, fees.service_fees, fees.cleaning, fees.occupancy,
                     occupants.adults, occupants.children, occupants.infants, occupants.non_infants
                     FROM dates, fees, occupants, listings
-                    WHERE listings.url_id = 1
+                    WHERE listings.url_id = ?
                     AND dates.listing_id = listings.url_id
                     AND fees.listing_id = listings.url_id
                     AND occupants.listing_id = listings.url_id`;
-  db.connection.query(queryStatement, (err, result) => {
+  const queryArgs = [req.params.listingId];
+  db.connection.query(queryStatement, queryArgs, (err, result) => {
     if (err) {
       res.send(500);
     } else {
