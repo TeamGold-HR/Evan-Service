@@ -11,7 +11,7 @@ app.use(express.json());
 
 app.use('/', express.static(path.join(__dirname, '../public')));
 
-app.get('/listingInfo/:listingId', (req, res) => {
+app.get('/:listingId', (req, res) => {
   console.log('ping recieved');
   const queryStatement = `SELECT DISTINCT
                     listings.url_id,

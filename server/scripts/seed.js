@@ -4,7 +4,7 @@ const dummy = require('./dummy-data.js');
 const seed = (month) => {
   // month is an integer representing the starting month and is zero indexed to dummy.months
   // function to generate a new set of data
-  for (let i = 0; i < 100; i++) {
+  for (let i = 0; i < 100; i += 1) {
     const ranAdults = Math.floor(Math.random() * dummy.adults.length);
     const ranKids = Math.floor(Math.random() * dummy.kids.length);
     const ranInfants = Math.floor(Math.random() * dummy.infants.length);
@@ -39,7 +39,7 @@ const seed = (month) => {
               if (errOcc) {
                 console.log(`occupants: ${errOcc}`);
               } else {
-                for (let j = 0; j < 2; j++) {
+                for (let j = 0; j < 2; j += 1) {
                   let daysInMonth;
                   if (month + j === 3 || month + j === 5 || month + j === 8 || month + j === 10) {
                     daysInMonth = 30;
@@ -48,7 +48,7 @@ const seed = (month) => {
                   } else {
                     daysInMonth = 31;
                   }
-                  for (let k = 0; k < daysInMonth; k++) {
+                  for (let k = 0; k < daysInMonth; k += 1) {
                     const ranReserve = Math.floor(Math.random() * dummy.reservations.length);
                     const daysQuery = `INSERT INTO dates (calendar_date, is_available, listing_id) VALUES 
                                                                     ("${month + 1 + j}/${k + 1}", ${dummy.reservations[ranReserve]}, ${i})`;
@@ -71,8 +71,3 @@ const seed = (month) => {
 };
 
 seed(3);
-
-
-module.exports = {
-  seed,
-};
