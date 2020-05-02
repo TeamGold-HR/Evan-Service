@@ -18,19 +18,19 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    let listing;
+    const s = this.state;
+    let listingId;
     if (window.location.pathname) {
-      listing = window.location.pathname.slice(1, window.location.pathname.length - 1);
+      listingId = window.location.pathname.slice(1, window.location.pathname.length - 1);
     } else {
-      listing = '0';
+      listingId = '0';
     }
-    const here = this.state;
-    if (!isNaN(listing) && listing > -1 && listing < 100) {
-      axios.get('/list/' + listing)
+    if (!isNaN(listingId) && listingId > -1 && listingId < 100) {
+      axios.get('/list/' + listingId)
         .then((response) => {
           const { data } = response;
           for (let i = 0; i < data.length; i += 1) {
-            here.dates.push({ date: data[i].calendar_date, available: data[i].is_available });
+            s.dates.push({ date: data[i].calendar_date, available: data[i].is_available });
           }
           this.setState({
             rent: data[0].base_rent,
@@ -50,18 +50,18 @@ class App extends React.Component {
   }
 
   render() {
-    const here = this.state;
+    const s = this.state;
     return (
       <div>
         <h2>hello world 2</h2>
-        <h3>Max Adults: {here.maxAdults}</h3>
-        <h3>Max Children: {here.maxChildren}</h3>
-        <h3>Max Infants: {here.maxInfants}</h3>
-        <h3>Max Non-infants: {here.maxNonInfants}</h3>
-        <h3>Base Rent: {here.rent}</h3>
-        <h3>Cleaning Fee: {here.cleaningFee}</h3>
-        <h3>Service Fee: {here.serviceFee}</h3>
-        <h3>Occupancy Fee: {here.occupancyFee}</h3>
+        <h3>Max Adults: {s.maxAdults}</h3>
+        <h3>Max Children: {s.maxChildren}</h3>
+        <h3>Max Infants: {s.maxInfants}</h3>
+        <h3>Max Non-infants: {s.maxNonInfants}</h3>
+        <h3>Base Rent: {s.rent}</h3>
+        <h3>Cleaning Fee: {s.cleaningFee}</h3>
+        <h3>Service Fee: {s.serviceFee}</h3>
+        <h3>Occupancy Fee: {s.occupancyFee}</h3>
       </div>
     );
   }
