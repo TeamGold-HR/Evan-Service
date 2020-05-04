@@ -1,5 +1,7 @@
 import React from 'react';
 import axios from 'axios';
+import Fees from './Fees.jsx';
+import Occupants from './Occupants.jsx';
 
 class App extends React.Component {
   constructor(props) {
@@ -10,13 +12,28 @@ class App extends React.Component {
       cleaningFee: undefined,
       serviceFee: undefined,
       occupancyFee: undefined,
+      adultsSelected: 1,
       maxAdults: undefined,
+      childrenSelected: 0,
       maxChildren: undefined,
+      infantsSelected: 0,
       maxInfants: undefined,
       maxNonInfants: undefined,
     };
+    this.increaseAdults = this.increaseAdults.bind(this);
+    this.decreaseAdults = this.decreaseAdults.bind(this);
+    this.increaseChildren = this.increaseChildren.bind(this);
+    this.decreaseChildren = this.decreaseChildren.bind(this);
+    this.increaseInfants = this.increaseInfants.bind(this);
+    this.decreaseInfants = this.decreaseInfants.bind(this);
+    this.finalize = this.finalize.bind(this);
   }
 
+  /*
+=====
+  - initialization
+=====
+  */
   componentDidMount() {
     const s = this.state;
     let listingId;
@@ -49,19 +66,116 @@ class App extends React.Component {
     }
   }
 
+  /*
+=====
+  - user input
+=====
+  */
+  increaseAdults() {
+    const {
+      adultsSelected,
+      maxAdults,
+      childrenSelected,
+      maxNonInfants,
+    } = this.state;
+    if (adultsSelected < maxAdults
+       && adultsSelected + childrenSelected < maxNonInfants) {
+      this.setState({ adultsSelected: adultsSelected + 1 });
+    }
+  }
+
+  decreaseAdults() {
+    const { adultsSelected } = this.state;
+    if (adultsSelected > 1) {
+      this.setState({ adultsSelected: adultsSelected - 1 });
+    }
+  }
+
+  increaseChildren() {
+    const {
+      childrenSelected,
+      maxChildren,
+      adultsSelected,
+      maxNonInfants,
+    } = this.state;
+    if (childrenSelected < maxChildren
+      && adultsSelected + childrenSelected < maxNonInfants) {
+      this.setState({ childrenSelected: childrenSelected + 1 });
+    }
+  }
+
+  decreaseChildren() {
+    const { childrenSelected } = this.state;
+    if (childrenSelected > 0) {
+      this.setState({ childrenSelected: childrenSelected - 1 });
+    }
+  }
+
+  increaseInfants() {
+    const { infantsSelected } = this.state;
+    if (infantsSelected < 20) {
+      this.setState({ infantsSelected: infantsSelected + 1 });
+    }
+  }
+
+  decreaseInfants() {
+    const { infantsSelected } = this.state;
+    if (infantsSelected > 0) {
+      this.setState({ infantsSelected: infantsSelected - 1 });
+    }
+  }
+
+  /*
+=====
+  - finalization
+=====
+  */
+
+  finalize() {
+    console.log(this.state.adultsSelected);
+    console.log(this.state.childrenSelected);
+    console.log(this.state.infantsSelected);
+    alert('Reservation Confirmed!');
+    this.setState({
+      adultsSelected: 1,
+      childrenSelected: 0,
+      infantsSelected: 0,
+    });
+  }
+
+  /*
+=====
+  - rendering
+=====
+  */
+
   render() {
     const s = this.state;
     return (
       <div>
-        <h2>hello world 2</h2>
-        <h3>Max Adults: {s.maxAdults}</h3>
-        <h3>Max Children: {s.maxChildren}</h3>
-        <h3>Max Infants: {s.maxInfants}</h3>
-        <h3>Max Non-infants: {s.maxNonInfants}</h3>
-        <h3>Base Rent: {s.rent}</h3>
-        <h3>Cleaning Fee: {s.cleaningFee}</h3>
-        <h3>Service Fee: {s.serviceFee}</h3>
-        <h3>Occupancy Fee: {s.occupancyFee}</h3>
+        <h2>Calendar Goes Here</h2>
+        <button type="button" id="finalize" onClick={this.finalize}>Reserve</button>
+        <Occupants
+          maxAdults={s.maxAdults}
+          adultsSelected={s.adultsSelected}
+          maxChildren={s.maxChildren}
+          childrenSelected={s.childrenSelected}
+          infantsSelected={s.infantsSelected}
+          maxInfants={s.maxInfants}
+          nonInfants={s.maxNonInfants}
+          increaseAdults={this.increaseAdults}
+          decreaseAdults={this.decreaseAdults}
+          increaseChildren={this.increaseChildren}
+          decreaseChildren={this.decreaseChildren}
+          increaseInfants={this.increaseInfants}
+          decreaseInfants={this.decreaseInfants}
+        />
+        <Fees
+          rent={s.rent}
+          service={s.serviceFee}
+          cleaning={s.cleaningFee}
+          occupancy={s.occupancyFee}
+        />
       </div>
     );
   }
