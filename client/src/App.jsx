@@ -1,7 +1,7 @@
 import React from 'react';
 import axios from 'axios';
-import Fees from './Fees.jsx';
-import Occupants from './Occupants.jsx';
+import Fees from './Fees';
+import Occupants from './Occupants';
 
 class App extends React.Component {
   constructor(props) {
@@ -20,12 +20,8 @@ class App extends React.Component {
       maxInfants: undefined,
       maxNonInfants: undefined,
     };
-    this.increaseAdults = this.increaseAdults.bind(this);
-    this.decreaseAdults = this.decreaseAdults.bind(this);
-    this.increaseChildren = this.increaseChildren.bind(this);
-    this.decreaseChildren = this.decreaseChildren.bind(this);
-    this.increaseInfants = this.increaseInfants.bind(this);
-    this.decreaseInfants = this.decreaseInfants.bind(this);
+    this.increase = this.increase.bind(this);
+    this.decrease = this.decrease.bind(this);
     this.finalize = this.finalize.bind(this);
   }
 
@@ -43,7 +39,7 @@ class App extends React.Component {
       listingId = '0';
     }
     if (!isNaN(listingId) && listingId > -1 && listingId < 100) {
-      axios.get('/list/' + listingId)
+      axios.get(`/list/${listingId}`)
         .then((response) => {
           const { data } = response;
           for (let i = 0; i < data.length; i += 1) {
@@ -71,56 +67,39 @@ class App extends React.Component {
   - user input
 =====
   */
-  increaseAdults() {
+  increase(occupant) {
     const {
       adultsSelected,
       maxAdults,
       childrenSelected,
+      maxChildren,
       maxNonInfants,
+      infantsSelected,
     } = this.state;
-    if (adultsSelected < maxAdults
+    if (occupant === 'adults'
+       && adultsSelected < maxAdults
        && adultsSelected + childrenSelected < maxNonInfants) {
       this.setState({ adultsSelected: adultsSelected + 1 });
-    }
-  }
-
-  decreaseAdults() {
-    const { adultsSelected } = this.state;
-    if (adultsSelected > 1) {
-      this.setState({ adultsSelected: adultsSelected - 1 });
-    }
-  }
-
-  increaseChildren() {
-    const {
-      childrenSelected,
-      maxChildren,
-      adultsSelected,
-      maxNonInfants,
-    } = this.state;
-    if (childrenSelected < maxChildren
+    } else if (occupant === 'children'
+      && childrenSelected < maxChildren
       && adultsSelected + childrenSelected < maxNonInfants) {
       this.setState({ childrenSelected: childrenSelected + 1 });
-    }
-  }
-
-  decreaseChildren() {
-    const { childrenSelected } = this.state;
-    if (childrenSelected > 0) {
-      this.setState({ childrenSelected: childrenSelected - 1 });
-    }
-  }
-
-  increaseInfants() {
-    const { infantsSelected } = this.state;
-    if (infantsSelected < 20) {
+    } else if (occupant === 'infants' && infantsSelected < 20) {
       this.setState({ infantsSelected: infantsSelected + 1 });
     }
   }
 
-  decreaseInfants() {
-    const { infantsSelected } = this.state;
-    if (infantsSelected > 0) {
+  decrease(occupant) {
+    const {
+      adultsSelected,
+      childrenSelected,
+      infantsSelected,
+    } = this.state;
+    if (occupant === 'adults' && adultsSelected > 1) {
+      this.setState({ adultsSelected: adultsSelected - 1 });
+    } else if (occupant === 'children' && childrenSelected > 0) {
+      this.setState({ childrenSelected: childrenSelected - 1 });
+    } else if (occupant === 'infants' && infantsSelected > 0) {
       this.setState({ infantsSelected: infantsSelected - 1 });
     }
   }
@@ -163,12 +142,8 @@ class App extends React.Component {
           infantsSelected={s.infantsSelected}
           maxInfants={s.maxInfants}
           nonInfants={s.maxNonInfants}
-          increaseAdults={this.increaseAdults}
-          decreaseAdults={this.decreaseAdults}
-          increaseChildren={this.increaseChildren}
-          decreaseChildren={this.decreaseChildren}
-          increaseInfants={this.increaseInfants}
-          decreaseInfants={this.decreaseInfants}
+          increase={this.increase}
+          decrease={this.decrease}
         />
         <Fees
           rent={s.rent}
