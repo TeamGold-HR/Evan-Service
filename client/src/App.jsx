@@ -8,17 +8,17 @@ class App extends React.Component {
     super(props);
     this.state = {
       dates: [],
-      rent: undefined,
-      cleaningFee: undefined,
-      serviceFee: undefined,
-      occupancyFee: undefined,
+      rent: 0,
+      cleaningFee: 0,
+      serviceFee: 0,
+      occupancyFee: 0,
       adultsSelected: 1,
-      maxAdults: undefined,
+      maxAdults: 0,
       childrenSelected: 0,
-      maxChildren: undefined,
+      maxChildren: 0,
       infantsSelected: 0,
-      maxInfants: undefined,
-      maxNonInfants: undefined,
+      maxInfants: 0,
+      maxNonInfants: 0,
     };
     this.increase = this.increase.bind(this);
     this.decrease = this.decrease.bind(this);
@@ -75,15 +75,23 @@ class App extends React.Component {
       maxChildren,
       maxNonInfants,
       infantsSelected,
+      rent,
+      serviceFee,
+      occupancyFee,
     } = this.state;
-    if (occupant === 'adults'
-       && adultsSelected < maxAdults
-       && adultsSelected + childrenSelected < maxNonInfants) {
-      this.setState({ adultsSelected: adultsSelected + 1 });
-    } else if (occupant === 'children'
-      && childrenSelected < maxChildren
-      && adultsSelected + childrenSelected < maxNonInfants) {
-      this.setState({ childrenSelected: childrenSelected + 1 });
+    if (adultsSelected + childrenSelected < maxNonInfants
+      && ((occupant === 'adults' && adultsSelected < maxAdults)
+      || (occupant === 'children' && childrenSelected < maxChildren))) {
+      this.setState({
+        rent: rent + 35,
+        serviceFee: serviceFee + 7,
+        occupancyFee: occupancyFee + 7,
+      });
+      if (occupant === 'adults') {
+        this.setState({ adultsSelected: adultsSelected + 1 });
+      } else if (occupant === 'children') {
+        this.setState({ childrenSelected: childrenSelected + 1 });
+      }
     } else if (occupant === 'infants' && infantsSelected < 20) {
       this.setState({ infantsSelected: infantsSelected + 1 });
     }
@@ -94,11 +102,21 @@ class App extends React.Component {
       adultsSelected,
       childrenSelected,
       infantsSelected,
+      rent,
+      serviceFee,
+      occupancyFee,
     } = this.state;
-    if (occupant === 'adults' && adultsSelected > 1) {
-      this.setState({ adultsSelected: adultsSelected - 1 });
-    } else if (occupant === 'children' && childrenSelected > 0) {
-      this.setState({ childrenSelected: childrenSelected - 1 });
+    if ((occupant === 'adults' && adultsSelected > 1) || (occupant === 'children' && childrenSelected > 0)) {
+      this.setState({
+        rent: rent - 35,
+        serviceFee: serviceFee - 7,
+        occupancyFee: occupancyFee - 7,
+      });
+      if (occupant === 'adults') {
+        this.setState({ adultsSelected: adultsSelected - 1 });
+      } else if (occupant === 'children') {
+        this.setState({ childrenSelected: childrenSelected - 1 });
+      }
     } else if (occupant === 'infants' && infantsSelected > 0) {
       this.setState({ infantsSelected: infantsSelected - 1 });
     }
