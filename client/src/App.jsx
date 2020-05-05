@@ -10,9 +10,12 @@ class App extends React.Component {
     super(props);
     this.state = {
       dates: [],
+      startingRent: 0,
       rent: 0,
       cleaningFee: 0,
+      startingService: 0,
       serviceFee: 0,
+      startingOccupancy: 0,
       occupancyFee: 0,
       adultsSelected: 1,
       maxAdults: 0,
@@ -52,8 +55,11 @@ class App extends React.Component {
           }
           this.setState({
             rent: data[0].base_rent,
+            startingRent: data[0].base_rent,
             cleaningFee: data[0].cleaning,
+            startingService: data[0].service_fees,
             serviceFee: data[0].service_fees,
+            startingOccupancy: data[0].occupancy,
             occupancyFee: data[0].occupancy,
             maxAdults: data[0].adults,
             maxChildren: data[0].children,
@@ -166,6 +172,9 @@ class App extends React.Component {
       adultsSelected: 1,
       childrenSelected: 0,
       infantsSelected: 0,
+      rent: this.state.startingRent,
+      serviceFee: this.state.startingService,
+      occupancyFee: this.state.startingOccupancy,
     });
   }
 
