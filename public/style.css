@@ -1,0 +1,43 @@
+#module-zone {
+    border: 1px solid black;
+    border-radius: 10px;
+    width: 25%;
+}
+
+button:hover, .note:hover {
+    cursor: pointer;
+}
+
+.occupant, .tally, .increment, .decrement {
+    display: inline;
+}
+
+.increment, .decrement {
+    margin: 0px 10px;
+    border-radius: 50%;
+    padding: 10px 13px;
+}
+
+#finalize {
+    display: flex;
+    background-color: red;
+    color: white;
+    border-radius: 10px;
+    padding: 5px 20px;
+    margin: 10px;
+    align-self: center;
+    justify-self: center;
+}
+
+.hidden {
+    display: none;
+}
+
+.render-button {
+    display: block;
+    margin: 10px;
+}
+
+.note {
+  text-decoration: underline;
+}

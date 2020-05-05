@@ -1,3 +1,5 @@
+/* eslint-disable class-methods-use-this */
+/* eslint-disable react/jsx-one-expression-per-line */
 import React from 'react';
 import axios from 'axios';
 import Fees from './Fees';
@@ -23,6 +25,9 @@ class App extends React.Component {
     this.increase = this.increase.bind(this);
     this.decrease = this.decrease.bind(this);
     this.finalize = this.finalize.bind(this);
+    this.toggleCalendar = this.toggleCalendar.bind(this);
+    this.toggleOccupants = this.toggleOccupants.bind(this);
+    this.toggleNote = this.toggleNote.bind(this);
   }
 
   /*
@@ -80,19 +85,19 @@ class App extends React.Component {
       occupancyFee,
     } = this.state;
     if (adultsSelected + childrenSelected < maxNonInfants
-      && ((occupant === 'adults' && adultsSelected < maxAdults)
-      || (occupant === 'children' && childrenSelected < maxChildren))) {
+      && ((occupant === 'increase-adults' && adultsSelected < maxAdults)
+      || (occupant === 'increase-children' && childrenSelected < maxChildren))) {
       this.setState({
         rent: rent + 35,
         serviceFee: serviceFee + 7,
         occupancyFee: occupancyFee + 7,
       });
-      if (occupant === 'adults') {
+      if (occupant === 'increase-adults') {
         this.setState({ adultsSelected: adultsSelected + 1 });
-      } else if (occupant === 'children') {
+      } else if (occupant === 'increase-children') {
         this.setState({ childrenSelected: childrenSelected + 1 });
       }
-    } else if (occupant === 'infants' && infantsSelected < 20) {
+    } else if (occupant === 'increase-infants' && infantsSelected < 5) {
       this.setState({ infantsSelected: infantsSelected + 1 });
     }
   }
@@ -106,19 +111,43 @@ class App extends React.Component {
       serviceFee,
       occupancyFee,
     } = this.state;
-    if ((occupant === 'adults' && adultsSelected > 1) || (occupant === 'children' && childrenSelected > 0)) {
+    if ((occupant === 'decrease-adults' && adultsSelected > 1) || (occupant === 'decrease-children' && childrenSelected > 0)) {
       this.setState({
         rent: rent - 35,
         serviceFee: serviceFee - 7,
         occupancyFee: occupancyFee - 7,
       });
-      if (occupant === 'adults') {
+      if (occupant === 'decrease-adults') {
         this.setState({ adultsSelected: adultsSelected - 1 });
-      } else if (occupant === 'children') {
+      } else if (occupant === 'decrease-children') {
         this.setState({ childrenSelected: childrenSelected - 1 });
       }
-    } else if (occupant === 'infants' && infantsSelected > 0) {
+    } else if (occupant === 'decrease-infants' && infantsSelected > 0) {
       this.setState({ infantsSelected: infantsSelected - 1 });
+    }
+  }
+
+  /*
+=====
+  - render toggles
+====
+  */
+
+  toggleCalendar() {
+    document.getElementById('calendar-render').classList.toggle('hidden');
+  }
+
+  toggleOccupants() {
+    document.getElementById('occupants-render').classList.toggle('hidden');
+  }
+
+  toggleNote(input) {
+    if (input === 'service-click') {
+      document.getElementById('service-note').classList.toggle('hidden');
+    } else if (input === 'cleaning-click') {
+      document.getElementById('cleaning-note').classList.toggle('hidden');
+    } else if (input === 'occupancy-click') {
+      document.getElementById('occupancy-note').classList.toggle('hidden');
     }
   }
 
@@ -149,25 +178,32 @@ class App extends React.Component {
   render() {
     const s = this.state;
     return (
-      <div>
-        <h2>Calendar Goes Here</h2>
+      <div id="module-zone">
+        <h2>${s.rent}/Night</h2>
+        <button type="button" className="render-button" onClick={this.toggleCalendar}>Select Reservation Days</button>
+        <h2 className="hidden" id="calendar-render">PLACEHOLDER - Calendar Goes Here</h2>
+        <button type="button" className="render-button" onClick={this.toggleOccupants}>Select Number of Occupants</button>
+        <div className="hidden" id="occupants-render">
+          <Occupants
+            maxAdults={s.maxAdults}
+            adultsSelected={s.adultsSelected}
+            maxChildren={s.maxChildren}
+            childrenSelected={s.childrenSelected}
+            infantsSelected={s.infantsSelected}
+            maxInfants={s.maxInfants}
+            nonInfants={s.maxNonInfants}
+            increase={this.increase}
+            decrease={this.decrease}
+            />
+        </div>
         <button type="button" id="finalize" onClick={this.finalize}>Reserve</button>
-        <Occupants
-          maxAdults={s.maxAdults}
-          adultsSelected={s.adultsSelected}
-          maxChildren={s.maxChildren}
-          childrenSelected={s.childrenSelected}
-          infantsSelected={s.infantsSelected}
-          maxInfants={s.maxInfants}
-          nonInfants={s.maxNonInfants}
-          increase={this.increase}
-          decrease={this.decrease}
-        />
+        <h5>Note: you will not be charged yet.</h5>
         <Fees
           rent={s.rent}
           service={s.serviceFee}
           cleaning={s.cleaningFee}
           occupancy={s.occupancyFee}
+          toggleNote={this.toggleNote}
         />
       </div>
     );
