@@ -10,9 +10,17 @@ function Fees(props) {
     props.toggleNote(event.target.id);
   };
   const p = props;
+  const baseRent = props.startingRent - 35;
+  const totalOccupants = p.adults + p.childrenSelected;
+  const occupancyFee = totalOccupants * 35;
   return (
     <div id="fees">
-      <h4>Rent Due: ${p.rent}</h4>
+      <h4><a onClick={toggle} id="rent-click" className="note">Rent Due:</a> ${p.rent}</h4>
+      <h6 className="hidden" id="rent-note">
+        <p>Rent Breakdown:</p>
+        <p>Base Rent per Night: ${baseRent}</p>
+        <p>(Fee per person: $35 x{totalOccupants}) Total Cost of Occupants: ${occupancyFee}</p>
+      </h6>
       <h4><a onClick={toggle} id="service-click" className="note">Service Fee:</a> ${p.service}</h4>
       <h6 className="hidden" id="service-note">This helps us run our platform and offer services like 24/7 support on your trip.</h6>
       <h4><a onClick={toggle} id="cleaning-click" className="note">Cleaning Fee:</a> ${p.cleaning}</h4>

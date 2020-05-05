@@ -1,6 +1,7 @@
 /* eslint-disable class-methods-use-this */
 /* eslint-disable react/jsx-one-expression-per-line */
 import React from 'react';
+import Calendar from 'react-calendar';
 import axios from 'axios';
 import Fees from './Fees';
 import Occupants from './Occupants';
@@ -24,6 +25,11 @@ class App extends React.Component {
       infantsSelected: 0,
       maxInfants: 0,
       maxNonInfants: 0,
+      date: new Date(),
+      firstPick: false,
+      secondPick: false,
+      firstSelection: '',
+      secondSelection: '',
     };
     this.increase = this.increase.bind(this);
     this.decrease = this.decrease.bind(this);
@@ -31,6 +37,7 @@ class App extends React.Component {
     this.toggleCalendar = this.toggleCalendar.bind(this);
     this.toggleOccupants = this.toggleOccupants.bind(this);
     this.toggleNote = this.toggleNote.bind(this);
+    this.dateChange = this.dateChange.bind(this);
   }
 
   /*
@@ -139,10 +146,6 @@ class App extends React.Component {
 ====
   */
 
-  toggleCalendar() {
-    document.getElementById('calendar-render').classList.toggle('hidden');
-  }
-
   toggleOccupants() {
     document.getElementById('occupants-render').classList.toggle('hidden');
   }
@@ -154,6 +157,48 @@ class App extends React.Component {
       document.getElementById('cleaning-note').classList.toggle('hidden');
     } else if (input === 'occupancy-click') {
       document.getElementById('occupancy-note').classList.toggle('hidden');
+    } else if (input === 'rent-click') {
+      document.getElementById('rent-note').classList.toggle('hidden');
+    }
+  }
+
+  /*
+=====
+  - calendar
+=====
+  */
+
+  toggleCalendar() {
+    if (document.getElementById('calendar-render').classList.contains('hidden')) {
+      document.getElementById('calendar-button').innerHTML = 'Pick Start Date';
+      this.setState({
+        firstPick: true,
+        secondPick: false,
+      });
+    } else {
+      document.getElementById('calendar-button').innerHTML = 'Select Reservation Days';
+      if (this.state.secondPick === '') {
+        this.setState({
+          firstSelection: '',
+          secondSelection: '',
+        });
+      }
+    }
+    document.getElementById('calendar-render').classList.toggle('hidden');
+  }
+
+  dateChange(date) {
+    if (this.state.secondPick) {
+      document.getElementById('calendar-button').innerHTML = 'Select Reservation Days';
+      document.getElementById('calendar-render').classList.toggle('hidden');
+      this.setState({ secondSelection: date });
+    } else if (this.state.firstPick) {
+      document.getElementById('calendar-button').innerHTML = 'Pick End Date';
+      this.setState({
+        firstPick: false,
+        secondPick: true,
+        firstSelection: date,
+      });
     }
   }
 
@@ -164,9 +209,11 @@ class App extends React.Component {
   */
 
   finalize() {
-    console.log(this.state.adultsSelected);
-    console.log(this.state.childrenSelected);
-    console.log(this.state.infantsSelected);
+    console.log(`Adults: ${this.state.adultsSelected}`);
+    console.log(`Children: ${this.state.childrenSelected}`);
+    console.log(`Infants: ${this.state.infantsSelected}`);
+    console.log(`Start Date: ${this.state.firstSelection}`);
+    console.log(`End Date: ${this.state.secondSelection}`);
     alert('Reservation Confirmed!');
     this.setState({
       adultsSelected: 1,
@@ -175,6 +222,8 @@ class App extends React.Component {
       rent: this.state.startingRent,
       serviceFee: this.state.startingService,
       occupancyFee: this.state.startingOccupancy,
+      firstSelection: '',
+      secondSelection: '',
     });
   }
 
@@ -189,8 +238,23 @@ class App extends React.Component {
     return (
       <div id="module-zone">
         <h2>${s.rent}/Night</h2>
-        <button type="button" className="render-button" onClick={this.toggleCalendar}>Select Reservation Days</button>
-        <h2 className="hidden" id="calendar-render">PLACEHOLDER - Calendar Goes Here</h2>
+        <button type="button" className="render-button" id="calendar-button" onClick={this.toggleCalendar}>
+          <div className="dual-button">
+            <p className="dual-text">Start Date:</p>
+            <p className="dual-text">Add Date</p>
+          </div>
+          <div className="dual-button">
+            <p className="dual-text">End Date:</p>
+            <p className="dual-text">Add Date</p>
+          </div>
+        </button>
+        <h2 className="hidden" id="calendar-render">
+          <Calendar
+            onChange={this.dateChange}
+            value={this.state.date}
+            className="react-calendar"
+          />
+        </h2>
         <button type="button" className="render-button" onClick={this.toggleOccupants}>Select Number of Occupants</button>
         <div className="hidden" id="occupants-render">
           <Occupants
@@ -203,15 +267,18 @@ class App extends React.Component {
             nonInfants={s.maxNonInfants}
             increase={this.increase}
             decrease={this.decrease}
-            />
+          />
         </div>
         <button type="button" id="finalize" onClick={this.finalize}>Reserve</button>
         <h5>Note: you will not be charged yet.</h5>
         <Fees
           rent={s.rent}
+          startingRent={s.startingRent}
           service={s.serviceFee}
           cleaning={s.cleaningFee}
           occupancy={s.occupancyFee}
+          adults={s.adultsSelected}
+          childrenSelected={s.childrenSelected}
           toggleNote={this.toggleNote}
         />
       </div>
