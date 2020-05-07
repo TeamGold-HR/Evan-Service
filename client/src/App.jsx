@@ -38,6 +38,8 @@ class App extends React.Component {
     this.toggleOccupants = this.toggleOccupants.bind(this);
     this.toggleNote = this.toggleNote.bind(this);
     this.dateChange = this.dateChange.bind(this);
+    this.closeModal = this.closeModal.bind(this);
+    this.dataSynthesis = this.dateSynthesis.bind(this);
   }
 
   /*
@@ -148,17 +150,30 @@ class App extends React.Component {
 
   toggleOccupants() {
     document.getElementById('occupants-render').classList.toggle('hidden');
+    document.getElementById('occupant-button-symbol').classList.toggle('rotated');
   }
 
   toggleNote(input) {
     if (input === 'service-click') {
-      document.getElementById('service-note').classList.toggle('hidden');
+      document.getElementById('service-note').style.display = 'block';
     } else if (input === 'cleaning-click') {
-      document.getElementById('cleaning-note').classList.toggle('hidden');
+      document.getElementById('cleaning-note').style.display = 'block';
     } else if (input === 'occupancy-click') {
-      document.getElementById('occupancy-note').classList.toggle('hidden');
+      document.getElementById('occupancy-note').style.display = 'block';
     } else if (input === 'rent-click') {
-      document.getElementById('rent-note').classList.toggle('hidden');
+      document.getElementById('rent-note').style.display = 'block';
+    }
+  }
+
+  closeModal(input) {
+    if (input === 'service-exit') {
+      document.getElementById('service-note').style.display = 'none';
+    } else if (input === 'cleaning-exit') {
+      document.getElementById('cleaning-note').style.display = 'none';
+    } else if (input === 'occupancy-exit') {
+      document.getElementById('occupancy-note').style.display = 'none';
+    } else if (input === 'rent-exit') {
+      document.getElementById('rent-note').style.display = 'none';
     }
   }
 
@@ -170,13 +185,25 @@ class App extends React.Component {
 
   toggleCalendar() {
     if (document.getElementById('calendar-render').classList.contains('hidden')) {
-      document.getElementById('calendar-button').innerHTML = 'Pick Start Date';
+      document.getElementById('dual-button-left').classList.toggle('highlighted');
+      document.getElementById('date-1').innerHTML = 'Add Date';
+      document.getElementById('date-2').innerHTML = 'Add Date';
       this.setState({
         firstPick: true,
         secondPick: false,
+        firstSelection: '',
+        secondSelection: '',
       });
     } else {
-      document.getElementById('calendar-button').innerHTML = 'Select Reservation Days';
+      if (document.getElementById('dual-button-left').classList.contains('highlighted')) {
+        document.getElementById('dual-button-left').classList.remove('highlighted');
+      } else if (document.getElementById('dual-button-right').classList.contains('highlighted')) {
+        document.getElementById('dual-button-right').classList.remove('highlighted');
+      }
+      let dateOne = document.getElementById('date-1');
+      let dateTwo = document.getElementById('date-2');
+      dateOne.innerHTML = 'Add Date';
+      dateTwo.innerHTML = 'Add Date';
       if (this.state.secondPick === '') {
         this.setState({
           firstSelection: '',
@@ -188,18 +215,84 @@ class App extends React.Component {
   }
 
   dateChange(date) {
-    if (this.state.secondPick) {
-      document.getElementById('calendar-button').innerHTML = 'Select Reservation Days';
+    const synth = this.dataSynthesis(date);
+    const humanDate = date.toDateString();
+    const {
+      firstSelection,
+      firstPick,
+      secondPick,
+    } = this.state;
+    if (secondPick) {
+      document.getElementById('dual-button-right').classList.toggle('highlighted');
       document.getElementById('calendar-render').classList.toggle('hidden');
-      this.setState({ secondSelection: date });
-    } else if (this.state.firstPick) {
-      document.getElementById('calendar-button').innerHTML = 'Pick End Date';
+      if (synth[0] < firstSelection[0] || (synth[0] >= firstSelection[0] && synth[1] < firstSelection[1])) {
+        document.getElementById('date-1').innerHTML = 'Add Date';
+        this.setState({
+          firstPick: false,
+          secondPick: false,
+          firstSelection: '',
+        });
+        alert('The selected check out date must be after the selected check in date.');
+      } else {
+        document.getElementById('date-2').innerHTML = humanDate;
+        this.setState({ secondSelection: synth });
+      }
+    } else if (firstPick) {
+      document.getElementById('dual-button-left').classList.toggle('highlighted');
+      document.getElementById('dual-button-right').classList.toggle('highlighted');
+      document.getElementById('date-1').innerHTML = humanDate;
       this.setState({
         firstPick: false,
         secondPick: true,
-        firstSelection: date,
+        firstSelection: synth,
       });
     }
+  }
+
+  dateSynthesis(date) {
+    let p = date.toDateString().split(' ').slice(1, 3);
+    p[1] = Number(p[1]);
+    switch (p[0]) {
+      case 'January':
+        p[0] = 0;
+        break;
+      case 'February':
+        p[0] = 1;
+        break;
+      case 'March':
+        p[0] = 2;
+        break;
+      case 'April':
+        p[0] = 3;
+        break;
+      case 'May':
+        p[0] = 4;
+        break;
+      case 'June':
+        p[0] = 5;
+        break;
+      case 'July':
+        p[0] = 6;
+        break;
+      case 'August':
+        p[0] = 7;
+        break;
+      case 'September':
+        p[0] = 8;
+        break;
+      case 'October':
+        p[0] = 9;
+        break;
+      case 'November':
+        p[0] = 10;
+        break;
+      case 'December':
+        p[0] = 11;
+        break;
+      default:
+        p[0] = 'error';
+    }
+    return p;
   }
 
   /*
@@ -209,22 +302,35 @@ class App extends React.Component {
   */
 
   finalize() {
-    console.log(`Adults: ${this.state.adultsSelected}`);
-    console.log(`Children: ${this.state.childrenSelected}`);
-    console.log(`Infants: ${this.state.infantsSelected}`);
-    console.log(`Start Date: ${this.state.firstSelection}`);
-    console.log(`End Date: ${this.state.secondSelection}`);
-    alert('Reservation Confirmed!');
-    this.setState({
-      adultsSelected: 1,
-      childrenSelected: 0,
-      infantsSelected: 0,
-      rent: this.state.startingRent,
-      serviceFee: this.state.startingService,
-      occupancyFee: this.state.startingOccupancy,
-      firstSelection: '',
-      secondSelection: '',
-    });
+    const {
+      adultsSelected,
+      childrenSelected,
+      infantsSelected,
+      firstSelection,
+      secondSelection,
+    } = this.state;
+    if (firstSelection === '' || secondSelection === '') {
+      alert('Please select a check in and checkout date.');
+    } else {
+      console.log(`Adults: ${adultsSelected}`);
+      console.log(`Children: ${childrenSelected}`);
+      console.log(`Infants: ${infantsSelected}`);
+      console.log(`Start Date: ${firstSelection}`);
+      console.log(`End Date: ${secondSelection}`);
+      alert('Reservation Confirmed!');
+      document.getElementById('date-1').innerHTML = 'Add Date';
+      document.getElementById('date-2').innerHTML = 'Add Date';
+      this.setState({
+        adultsSelected: 1,
+        childrenSelected: 0,
+        infantsSelected: 0,
+        rent: this.state.startingRent,
+        serviceFee: this.state.startingService,
+        occupancyFee: this.state.startingOccupancy,
+        firstSelection: '',
+        secondSelection: '',
+      });
+    }
   }
 
   /*
@@ -235,19 +341,26 @@ class App extends React.Component {
 
   render() {
     const s = this.state;
+    let totalOcc = s.adultsSelected + s.childrenSelected;
     return (
       <div id="module-zone">
-        <h2>${s.rent}/Night</h2>
-        <button type="button" className="render-button" id="calendar-button" onClick={this.toggleCalendar}>
-          <div className="dual-button">
-            <p className="dual-text">Start Date:</p>
-            <p className="dual-text">Add Date</p>
-          </div>
-          <div className="dual-button">
-            <p className="dual-text">End Date:</p>
-            <p className="dual-text">Add Date</p>
-          </div>
-        </button>
+        <div id="top-summary">
+          <h2>${s.rent} / Night</h2>
+        </div>
+        <div className="flex-button">
+          <button type="button" className="render-button" id="calendar-button" onClick={this.toggleCalendar}>
+            <div id="dual-button-container">
+              <div className="dual-button border-right" id="dual-button-left">
+                <p className="dual-text bold">Check In</p>
+                <p className="dual-text faded" id="date-1">Add Date</p>
+              </div>
+              <div className="dual-button" id="dual-button-right">
+                <p className="dual-text bold">Check Out</p>
+                <p className="dual-text faded" id="date-2">Add Date</p>
+              </div>
+            </div>
+          </button>
+        </div>
         <h2 className="hidden" id="calendar-render">
           <Calendar
             onChange={this.dateChange}
@@ -255,7 +368,19 @@ class App extends React.Component {
             className="react-calendar"
           />
         </h2>
-        <button type="button" className="render-button" onClick={this.toggleOccupants}>Select Number of Occupants</button>
+        <div className="center-box">
+          <button type="button" className="render-button" id="occupant-button" onClick={this.toggleOccupants}>
+            <div id="occupant-button-container">
+              <div id="total-occupant-tracker">
+                <p className="bold">Guests</p>
+                <p>{`${totalOcc} ${totalOcc > 1 ? 'Guests' : 'Guest'} ${!s.infantsSelected > 0 ? '' : `${s.infantsSelected} ${s.infantsSelected > 1 ? 'Infants' : 'Infant'}`}`}</p>
+              </div>
+              <div id="occupant-modal-button">
+                <button type="button" id="occupant-button-symbol">^</button>
+              </div>
+            </div>
+          </button>
+        </div>
         <div className="hidden" id="occupants-render">
           <Occupants
             maxAdults={s.maxAdults}
@@ -269,8 +394,12 @@ class App extends React.Component {
             decrease={this.decrease}
           />
         </div>
-        <button type="button" id="finalize" onClick={this.finalize}>Reserve</button>
-        <h5>Note: you will not be charged yet.</h5>
+        <div className="center-box">
+          <button type="button" id="finalize" onClick={this.finalize}>Reserve</button>
+        </div>
+        <div className="center-box faded">
+          <h5>Note: You will not be charged yet.</h5>
+        </div>
         <Fees
           rent={s.rent}
           startingRent={s.startingRent}
@@ -280,6 +409,7 @@ class App extends React.Component {
           adults={s.adultsSelected}
           childrenSelected={s.childrenSelected}
           toggleNote={this.toggleNote}
+          closeModal={this.closeModal}
         />
       </div>
     );
