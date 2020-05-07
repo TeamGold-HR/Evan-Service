@@ -251,42 +251,43 @@ class App extends React.Component {
 
   dateSynthesis(date) {
     let p = date.toDateString().split(' ').slice(1, 3);
+    console.log(p);
     p[1] = Number(p[1]);
     switch (p[0]) {
-      case 'January':
+      case 'Jan':
         p[0] = 0;
         break;
-      case 'February':
+      case 'Feb':
         p[0] = 1;
         break;
-      case 'March':
+      case 'Mar':
         p[0] = 2;
         break;
-      case 'April':
+      case 'Apr':
         p[0] = 3;
         break;
       case 'May':
         p[0] = 4;
         break;
-      case 'June':
+      case 'Jun':
         p[0] = 5;
         break;
-      case 'July':
+      case 'Jul':
         p[0] = 6;
         break;
-      case 'August':
+      case 'Aug':
         p[0] = 7;
         break;
-      case 'September':
+      case 'Sep':
         p[0] = 8;
         break;
-      case 'October':
+      case 'Oct':
         p[0] = 9;
         break;
-      case 'November':
+      case 'Nov':
         p[0] = 10;
         break;
-      case 'December':
+      case 'Dec':
         p[0] = 11;
         break;
       default:
