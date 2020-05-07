@@ -1,11 +1,97 @@
 #module-zone {
-    border: 1px solid black;
+    box-shadow: 0px 0px 5px gray;
     border-radius: 10px;
     width: 25%;
+    z-index: 1;
+    padding: 10px;
 }
+
+.top-summary {
+  margin: 10px;
+}
+
+/*
+=====
+  - modal functionality
+=====
+*/
+.modal {
+  position: fixed;
+  border: 2px solid gray;
+  z-index: 5;
+  opacity: 1;
+  background-color: white;
+}
+
+.modal-content {
+  display: flex;
+  justify-content: space-between;
+  padding: 5px;
+}
+
+#rent-note {
+  display: none;
+}
+
+#service-note {
+  display: none;
+}
+
+#cleaning-note {
+  display: none;
+}
+
+#occupancy-note {
+  display: none;
+}
+
+.modal-exit-button {
+  border-radius: 45%;
+  height: 100%;
+  width: 100%;
+  padding: 5px;
+}
+
+.modal-exit-button:hover {
+  background-color: #f0f0ed;
+}
+
+.modal-top {
+  align-self: flex-start;
+}
+
+.modal-exit-button:hover {
+  cursor: pointer;
+}
+
+/*
+=====
+  - generic button stylings
+=====
+*/
 
 button:hover, .note:hover {
     cursor: pointer;
+}
+
+.render-button {
+  width: 95%;
+}
+
+/*
+=====
+  - occupant panel styling
+=====
+*/
+
+#occupants {
+  position: fixed;
+  background-color: white;
+  z-index: 5;
+  width: 25%;
+  box-shadow: 0px 0px 5px gray;
+  padding: 5px;
+  border-radius: 10px;
 }
 
 .occupant, .tally, .increment, .decrement {
@@ -18,39 +104,136 @@ button:hover, .note:hover {
     padding: 10px 13px;
 }
 
+#occupant-button {
+  border: 1px solid gray;
+  border-radius: 5px;
+  margin-bottom: 5px;
+}
+
+#occupant-button-container {
+  display: flex;
+  justify-content: space-between;
+}
+
+.rotated {
+  transform: rotate(180deg);
+}
+
+.occupant-tracker {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  align-content: center;
+}
+
+#occupant-modal-button {
+  align-self: center;
+}
+
+#occupant-button-symbol {
+  border: transparent;
+  font-size: x-large;
+}
+
+/*
+=====
+  - finalize button styling
+=====
+*/
+
 #finalize {
-    background-color: red;
+    background-color: #BD1E59;
     color: white;
-    width: 100%;
+    width: 95%;
     border-radius: 10px;
-    padding: 5px 20px;
-    margin: 10px 0px;
+    padding: 10px 20px;
+    font-size: 15px;
+    margin-top: 5px;
 }
 
-.hidden {
-    display: none;
+/*
+=====
+  - fee section stylings
+=====
+*/
+.fee-box {
+  display: flex;
+  justify-content: space-between;
 }
 
-.render-button {
-    margin: 10px 0px;
-    width: 100%;
+#fees {
+  width: 95%;
+}
+
+/*
+=====
+  - arranging styles
+=====
+*/
+
+.center-box {
+  display: flex;
+  justify-content: center;
+}
+
+.top-border {
+  border-top: 1px solid gray;
+}
+
+.border-right {
+  border-right: 1px solid black;
+}
+
+/*
+=====
+  - text stylings
+=====
+*/
+.bold {
+  font-weight: bold;
+}
+
+.faded {
+  color: gray;
 }
 
 .note {
   text-decoration: underline;
 }
 
+.hidden {
+  display: none;
+}
+
+/*
+=====
+  - start and end date button
+=====
+*/
+.flex-button {
+  display: flex;
+  justify-content: center;
+}
+
+#calendar-button {
+  background-color: #ffffff;
+  border: 1px solid black;
+  border-radius: 5px;
+}
+
+#dual-button-container {
+  display: flex;
+  flex-grow: 1;
+  width: 100%;
+}
+
 .dual-button {
-    border: 1px solid black;
-    display: inline;
-    font-size: small;
+  width: 100%;
 }
 
-.dual-text {
-    margin: 0;
-    padding: 0;
+.highlighted {
+  background-color: #f0f0ed;
 }
-
 
 /*
 =====
