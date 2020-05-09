@@ -1,3 +1,7 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable max-len */
+/* eslint-disable react/no-access-state-in-setstate */
+/* eslint-disable react/destructuring-assignment */
 /* eslint-disable class-methods-use-this */
 /* eslint-disable react/jsx-one-expression-per-line */
 import React from 'react';
@@ -23,13 +27,19 @@ class App extends React.Component {
       childrenSelected: 0,
       maxChildren: 0,
       infantsSelected: 0,
-      maxInfants: 0,
+      maxInfants: 5,
       maxNonInfants: 0,
       date: new Date(),
       firstPick: false,
       secondPick: false,
       firstSelection: '',
       secondSelection: '',
+      occModal: false,
+      occNoteModal: false,
+      cleaningNoteModal: false,
+      serviceNoteModal: false,
+      rentNoteModal: false,
+      calModal: false,
     };
     this.increase = this.increase.bind(this);
     this.decrease = this.decrease.bind(this);
@@ -55,31 +65,29 @@ class App extends React.Component {
     } else {
       listingId = '0';
     }
-    if (!isNaN(listingId) && listingId > -1 && listingId < 100) {
-      axios.get(`/list/${listingId}`)
-        .then((response) => {
-          const { data } = response;
-          for (let i = 0; i < data.length; i += 1) {
-            s.dates.push({ date: data[i].calendar_date, available: data[i].is_available });
-          }
-          this.setState({
-            rent: data[0].base_rent,
-            startingRent: data[0].base_rent,
-            cleaningFee: data[0].cleaning,
-            startingService: data[0].service_fees,
-            serviceFee: data[0].service_fees,
-            startingOccupancy: data[0].occupancy,
-            occupancyFee: data[0].occupancy,
-            maxAdults: data[0].adults,
-            maxChildren: data[0].children,
-            maxInfants: data[0].infants,
-            maxNonInfants: data[0].non_infants,
-          });
-        })
-        .catch((err) => {
-          console.log(err);
+    axios.get(`/list/${listingId}`)
+      .then((response) => {
+        const { data } = response;
+        for (let i = 0; i < data.length; i += 1) {
+          s.dates.push({ date: data[i].calendar_date, available: data[i].is_available });
+        }
+        this.setState({
+          rent: data[0].base_rent,
+          startingRent: data[0].base_rent,
+          cleaningFee: data[0].cleaning,
+          startingService: data[0].service_fees,
+          serviceFee: data[0].service_fees,
+          startingOccupancy: data[0].occupancy,
+          occupancyFee: data[0].occupancy,
+          maxAdults: data[0].adults,
+          maxChildren: data[0].children,
+          maxInfants: data[0].infants,
+          maxNonInfants: data[0].non_infants,
         });
-    }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
 
   /*
@@ -151,29 +159,50 @@ class App extends React.Component {
   toggleOccupants() {
     document.getElementById('occupants-render').classList.toggle('hidden');
     document.getElementById('occupant-button-symbol').classList.toggle('rotated');
+    this.setState({ occModal: !this.state.occModal });
   }
 
   toggleNote(input) {
-    if (input === 'service-click') {
+    const {
+      occNoteModal,
+      serviceNoteModal,
+      cleaningNoteModal,
+      rentNoteModal,
+    } = this.state;
+    if (input === 'service-click' && !serviceNoteModal) {
       document.getElementById('service-note').style.display = 'block';
-    } else if (input === 'cleaning-click') {
+      this.setState({ serviceNoteModal: true });
+    } else if (input === 'cleaning-click' && !cleaningNoteModal) {
       document.getElementById('cleaning-note').style.display = 'block';
-    } else if (input === 'occupancy-click') {
+      this.setState({ cleaningNoteModal: true });
+    } else if (input === 'occupancy-click' && !occNoteModal) {
       document.getElementById('occupancy-note').style.display = 'block';
-    } else if (input === 'rent-click') {
+      this.setState({ occNoteModal: true });
+    } else if (input === 'rent-click' && !rentNoteModal) {
       document.getElementById('rent-note').style.display = 'block';
+      this.setState({ rentNoteModal: true });
     }
   }
 
   closeModal(input) {
-    if (input === 'service-exit') {
+    const {
+      occNoteModal,
+      serviceNoteModal,
+      cleaningNoteModal,
+      rentNoteModal,
+    } = this.state;
+    if (input === 'service-exit' && serviceNoteModal) {
       document.getElementById('service-note').style.display = 'none';
-    } else if (input === 'cleaning-exit') {
+      this.setState({ serviceNoteModal: false });
+    } else if (input === 'cleaning-exit' && cleaningNoteModal) {
       document.getElementById('cleaning-note').style.display = 'none';
-    } else if (input === 'occupancy-exit') {
+      this.setState({ cleaningNoteModal: false });
+    } else if (input === 'occupancy-exit' && occNoteModal) {
       document.getElementById('occupancy-note').style.display = 'none';
-    } else if (input === 'rent-exit') {
+      this.setState({ occNoteModal: false });
+    } else if (input === 'rent-exit' && rentNoteModal) {
       document.getElementById('rent-note').style.display = 'none';
+      this.setState({ rentNoteModal: false });
     }
   }
 
@@ -184,11 +213,12 @@ class App extends React.Component {
   */
 
   toggleCalendar() {
-    if (document.getElementById('calendar-render').classList.contains('hidden')) {
-      document.getElementById('dual-button-left').classList.toggle('highlighted');
+    if (!this.state.calModal) {
+      document.getElementById('dual-button-left').classList.add('highlighted');
       document.getElementById('date-1').innerHTML = 'Add Date';
       document.getElementById('date-2').innerHTML = 'Add Date';
       this.setState({
+        calModal: true,
         firstPick: true,
         secondPick: false,
         firstSelection: '',
@@ -200,12 +230,13 @@ class App extends React.Component {
       } else if (document.getElementById('dual-button-right').classList.contains('highlighted')) {
         document.getElementById('dual-button-right').classList.remove('highlighted');
       }
-      let dateOne = document.getElementById('date-1');
-      let dateTwo = document.getElementById('date-2');
+      const dateOne = document.getElementById('date-1');
+      const dateTwo = document.getElementById('date-2');
       dateOne.innerHTML = 'Add Date';
       dateTwo.innerHTML = 'Add Date';
-      if (this.state.secondPick === '') {
+      if (this.state.secondSelection === '') {
         this.setState({
+          calModal: false,
           firstSelection: '',
           secondSelection: '',
         });
@@ -223,7 +254,7 @@ class App extends React.Component {
       secondPick,
     } = this.state;
     if (secondPick) {
-      document.getElementById('dual-button-right').classList.toggle('highlighted');
+      document.getElementById('dual-button-right').classList.remove('highlighted');
       document.getElementById('calendar-render').classList.toggle('hidden');
       if (synth[0] < firstSelection[0] || (synth[0] >= firstSelection[0] && synth[1] < firstSelection[1])) {
         document.getElementById('date-1').innerHTML = 'Add Date';
@@ -231,15 +262,21 @@ class App extends React.Component {
           firstPick: false,
           secondPick: false,
           firstSelection: '',
+          calModal: false,
         });
         alert('The selected check out date must be after the selected check in date.');
       } else {
         document.getElementById('date-2').innerHTML = humanDate;
-        this.setState({ secondSelection: synth });
+        this.setState({
+          secondSelection: synth,
+          secondPick: false,
+          firstPick: false,
+          calModal: false,
+        });
       }
     } else if (firstPick) {
-      document.getElementById('dual-button-left').classList.toggle('highlighted');
-      document.getElementById('dual-button-right').classList.toggle('highlighted');
+      document.getElementById('dual-button-left').classList.remove('highlighted');
+      document.getElementById('dual-button-right').classList.add('highlighted');
       document.getElementById('date-1').innerHTML = humanDate;
       this.setState({
         firstPick: false,
@@ -250,8 +287,7 @@ class App extends React.Component {
   }
 
   dateSynthesis(date) {
-    let p = date.toDateString().split(' ').slice(1, 3);
-    console.log(p);
+    const p = date.toDateString().split(' ').slice(1, 3);
     p[1] = Number(p[1]);
     switch (p[0]) {
       case 'Jan':
@@ -313,12 +349,14 @@ class App extends React.Component {
     if (firstSelection === '' || secondSelection === '') {
       alert('Please select a check in and checkout date.');
     } else {
+      /*
       console.log(`Adults: ${adultsSelected}`);
       console.log(`Children: ${childrenSelected}`);
       console.log(`Infants: ${infantsSelected}`);
       console.log(`Start Date: ${firstSelection}`);
       console.log(`End Date: ${secondSelection}`);
       alert('Reservation Confirmed!');
+      */
       document.getElementById('date-1').innerHTML = 'Add Date';
       document.getElementById('date-2').innerHTML = 'Add Date';
       this.setState({
@@ -342,7 +380,7 @@ class App extends React.Component {
 
   render() {
     const s = this.state;
-    let totalOcc = s.adultsSelected + s.childrenSelected;
+    const totalOcc = s.adultsSelected + s.childrenSelected;
     return (
       <div id="module-zone">
         <div id="top-summary">

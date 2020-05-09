@@ -1,0 +1,197 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`unit tests should render 1`] = `
+<div
+  id="fees"
+>
+  <div
+    className="fee-box"
+  >
+    <h4>
+      <a
+        className="note"
+        id="rent-click"
+        onClick={[Function]}
+      >
+        Rent Due:
+      </a>
+    </h4>
+    <h4>
+      $
+    </h4>
+  </div>
+  <div
+    className="modal"
+    id="rent-note"
+  >
+    <div
+      className="modal-content"
+    >
+      <div
+        id="rent-note-modal"
+      >
+        <p>
+          Rent Breakdown:
+        </p>
+        <p>
+          Base Rent per Night: $
+          NaN
+        </p>
+        <p>
+          (Fee per person: $35 x
+          NaN
+          ) Total Cost of Occupants: $
+          NaN
+        </p>
+      </div>
+      <div
+        className="modal-top"
+      >
+        <p>
+          <a
+            className="modal-exit-button bold"
+            id="rent-exit"
+            onClick={[Function]}
+          >
+            X
+          </a>
+        </p>
+      </div>
+    </div>
+  </div>
+  <div
+    className="fee-box"
+  >
+    <h4>
+      <a
+        className="note"
+        id="service-click"
+        onClick={[Function]}
+      >
+        Service Fee:
+      </a>
+    </h4>
+    <h4>
+      $
+    </h4>
+  </div>
+  <div
+    className="modal"
+    id="service-note"
+  >
+    <div
+      className="modal-content"
+    >
+      <h6>
+        This helps us run our platform and offer services like 24/7 support on your trip.
+      </h6>
+      <div
+        className="modal-top"
+      >
+        <p>
+          <a
+            className="modal-exit-button bold"
+            id="service-exit"
+            onClick={[Function]}
+          >
+            X
+          </a>
+        </p>
+      </div>
+    </div>
+  </div>
+  <div
+    className="fee-box"
+  >
+    <h4>
+      <a
+        className="note"
+        id="cleaning-click"
+        onClick={[Function]}
+      >
+        Cleaning Fee:
+      </a>
+    </h4>
+    <h4>
+      $
+    </h4>
+  </div>
+  <div
+    className="modal"
+    id="cleaning-note"
+  >
+    <div
+      className="modal-content"
+    >
+      <h6>
+        One-time fee charged by host to cover the cost of cleaning their space.
+      </h6>
+      <div
+        className="modal-top"
+      >
+        <p>
+          <a
+            className="modal-exit-button bold"
+            id="cleaning-exit"
+            onClick={[Function]}
+          >
+            X
+          </a>
+        </p>
+      </div>
+    </div>
+  </div>
+  <div
+    className="fee-box"
+  >
+    <h4>
+      <a
+        className="note"
+        id="occupancy-click"
+        onClick={[Function]}
+      >
+        Occupancy Fee:
+      </a>
+    </h4>
+    <h4>
+      $
+    </h4>
+  </div>
+  <div
+    className="modal"
+    id="occupancy-note"
+  >
+    <div
+      className="modal-content"
+    >
+      <h6>
+        Dependent on local taxes of the location you are renting in.
+      </h6>
+      <div
+        className="modal-top"
+      >
+        <p>
+          <a
+            className="modal-exit-button bold"
+            id="occupancy-exit"
+            onClick={[Function]}
+          >
+            X
+          </a>
+        </p>
+      </div>
+    </div>
+  </div>
+  <div
+    className="fee-box top-border"
+  >
+    <h2>
+      Total:
+    </h2>
+    <h2>
+      $
+      NaN
+    </h2>
+  </div>
+</div>
+`;
