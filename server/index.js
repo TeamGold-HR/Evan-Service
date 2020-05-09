@@ -3,7 +3,7 @@ const express = require('express');
 const app = express();
 const path = require('path');
 
-const PORT = 3002;
+const PORT = process.env.PORT || 3002;
 const db = require('../database/index.js');
 
 
@@ -12,7 +12,7 @@ app.use(express.json());
 app.use('/:listingId', express.static(path.join(__dirname, '../public')));
 
 app.get('/', (req, res) => {
-  res.redirect(301, 'http://127.0.0.1:3002/0/');
+  res.redirect(301, 'http://127.0.0.1:3002/0');
 });
 
 app.get('/list/:listingId', (req, res) => {
