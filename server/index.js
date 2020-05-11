@@ -12,7 +12,7 @@ app.use(express.json());
 app.use('/:listingId', express.static(path.join(__dirname, '../public')));
 
 app.get('/', (req, res) => {
-  res.redirect(301, 'http://127.0.0.1:3007/0');
+  res.redirect(301, `http://127.0.0.1:${PORT}/0`);
 });
 
 app.get('/list/:listingId', (req, res) => {
