@@ -15,7 +15,7 @@ app.get('/', (req, res) => {
   res.redirect(301, `http://127.0.0.1:${PORT}/0`);
 });
 
-app.get('/list/:listingId', (req, res) => {
+app.get('/reservation/:listingId', (req, res) => {
   console.log('ping recieved');
   const queryStatement = `SELECT DISTINCT
                     listings.url_id,

@@ -65,7 +65,7 @@ class App extends React.Component {
     } else {
       listingId = '0';
     }
-    axios.get(`/list/${listingId}`)
+    axios.get(`/reservation/${listingId}`)
       .then((response) => {
         const { data } = response;
         for (let i = 0; i < data.length; i += 1) {
