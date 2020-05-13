@@ -58,6 +58,7 @@ class App extends React.Component {
 =====
   */
   componentDidMount() {
+    window.addEventListener('click', this.closeModal);
     const s = this.state;
     let listingId;
     if (window.location.pathname) {
@@ -203,6 +204,20 @@ class App extends React.Component {
     } else if (input === 'rent-exit' && rentNoteModal) {
       document.getElementById('rent-note').style.display = 'none';
       this.setState({ rentNoteModal: false });
+    } else if (
+      (rentNoteModal || serviceNoteModal || cleaningNoteModal || occNoteModal)
+      && event.target.id !== 'service-click' && event.target.id !== 'cleaning-click'
+      && event.target.id !== 'occupancy-click' && event.target.id !== 'rent-click') {
+      document.getElementById('service-note').style.display = 'none';
+      document.getElementById('cleaning-note').style.display = 'none';
+      document.getElementById('occupancy-note').style.display = 'none';
+      document.getElementById('rent-note').style.display = 'none';
+      this.setState({
+        rentNoteModal: false,
+        serviceNoteModal: false,
+        cleaningNoteModal: false,
+        occNoteModal: false,
+      });
     }
   }
 
@@ -384,7 +399,7 @@ class App extends React.Component {
     return (
       <div id="module-zone">
         <div id="top-summary">
-          <h2>${s.rent} / Night</h2>
+          <h2><span className="bigger">${s.rent}</span> per night</h2>
         </div>
         <div className="flex-button">
           <button type="button" className="render-button" id="calendar-button" onClick={this.toggleCalendar}>
@@ -415,7 +430,7 @@ class App extends React.Component {
                 <p>{`${totalOcc} ${totalOcc > 1 ? 'Guests' : 'Guest'} ${!s.infantsSelected > 0 ? '' : `${s.infantsSelected} ${s.infantsSelected > 1 ? 'Infants' : 'Infant'}`}`}</p>
               </div>
               <div id="occupant-modal-button">
-                <button type="button" id="occupant-button-symbol">^</button>
+                <p type="button" id="occupant-button-symbol">^</p>
               </div>
             </div>
           </button>
