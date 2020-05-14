@@ -1,7 +1,10 @@
 #module-zone {
-    border-color: solid 1px rgba(145, 145, 145, 0.2);
+    position: sticky;
+    top: 30px;
+    height: max-content;
+    width: 18rem;
+    border: solid 1px rgba(145, 145, 145, 0.2);
     z-index: 1;
-    width: 100%;
     padding: 10px;
     font-family: Arial, Helvetica, sans-serif
 }
@@ -10,14 +13,22 @@
   margin: 10px;
 }
 
+p {
+  margin: 5px;
+}
+
+h4 {
+  font-weight: normal;
+}
+
 /*
 =====
   - modal functionality
 =====
 */
 .modal {
-  position: fixed;
-  box-shadow: 0px 0px 1px 1px rgba(145, 145, 145, 0.2);
+  position: absolute;
+  box-shadow: 0px 0px 2px 2px rgba(145, 145, 145, 0.2);
   z-index: 10;
   opacity: 1;
   background-color: white;
@@ -56,12 +67,25 @@
   background-color: #f0f0ed;
 }
 
+.modal-text {
+  font-size: medium;
+  padding: 15px;
+}
+
 .modal-top {
+  display: flex;
+  flex-direction: column;
   align-self: flex-start;
+  padding: 2px;
 }
 
 .modal-exit-button:hover {
   cursor: pointer;
+}
+
+.rent-breakdown {
+  display: flex;
+  justify-content: space-between;
 }
 
 /*
@@ -85,17 +109,33 @@ button:hover, .note:hover {
 */
 
 #occupants {
-  position: fixed;
+  position: absolute;
   background-color: white;
   z-index: 5;
-  width: 25%;
+  width: 95%;
+  height: 300px;
   box-shadow: 0px 0px 5px gray;
   padding: 5px;
-  border-radius: 5px;
+  border-radius: 0 0 5px 5px;
+}
+
+#occupants-render {
+  position: relative;
+  width: 100%;
 }
 
 .occupant, .tally, .increment, .decrement {
     display: inline;
+}
+
+.occupant {
+  padding-left: 5px;
+  margin: 5px;
+}
+
+#modal-occupant-position {
+  display: flex;
+  justify-content: center;
 }
 
 .increment, .decrement {
@@ -106,7 +146,6 @@ button:hover, .note:hover {
 
 #occupant-button {
   border-color: rgba(145, 145, 145, 0.2);
-  border-radius: 5px;
   margin-bottom: 5px;
 }
 
@@ -121,9 +160,26 @@ button:hover, .note:hover {
 
 .occupant-tracker {
   display: flex;
-  justify-content: space-between;
   margin-bottom: 10px;
   align-content: center;
+}
+
+.occupant-type, .occupant-adjustor {
+  flex: 1;
+  padding: 5px;
+}
+
+.occupant-type {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-content: center;
+}
+
+.occupant-adjustor {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
 }
 
 #occupant-modal-button {
@@ -133,6 +189,24 @@ button:hover, .note:hover {
 #occupant-button-symbol {
   border: transparent;
   font-size: x-large;
+}
+
+#modal-close-button {
+  display: flex;
+  justify-content: flex-end;
+}
+
+#modal-close-button-div {
+  padding-right: 10px;
+}
+
+#total-occupant-tracker {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-content: flex-start;
+  align-items: flex-start;
+  justify-content: center;
 }
 
 /*
@@ -207,6 +281,10 @@ button:hover, .note:hover {
 
 .bigger {
   font-size: 1.5em;
+}
+
+.under-border {
+  border-bottom: 1px solid rgba(145, 145, 145, 0.2);
 }
 
 /*

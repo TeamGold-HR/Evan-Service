@@ -30,7 +30,7 @@ app.get('/reservation/:listingId', (req, res) => {
   const queryArgs = [req.params.listingId];
   db.connection.query(queryStatement, queryArgs, (err, result) => {
     if (err) {
-      res.send(500);
+      res.sendStatus(500);
     } else {
       res.send(result);
     }
