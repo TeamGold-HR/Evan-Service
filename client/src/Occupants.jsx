@@ -24,9 +24,9 @@ class Occupants extends React.Component {
     return (
       <div id="occupants">
         <div id="adults">
-          <div className="occupant-tracker">
+          <div className="occupant-tracker" id="occupant-tracker-adults">
             <div className="occupant-type">
-              <h2 className="occupant">Adults</h2>
+              <h2 className="occupant" id="occupant-type-adult">Adults</h2>
             </div>
             <div className="occupant-adjustor">
               <button type="button" className="decrement" id="decrease-adults" onClick={this.decrease}>-</button>
@@ -36,10 +36,10 @@ class Occupants extends React.Component {
           </div>
         </div>
         <div id="children">
-          <div className="occupant-tracker">
+          <div className="occupant-tracker" id="occupant-tracker-children">
             <div className="occupant-type">
               <p className="occupant bold">Children</p>
-              <p>age 2 - 12</p>
+              <p className="occupant">age 2 - 12</p>
             </div>
             <div className="occupant-adjustor">
               <button type="button" className="decrement" id="decrease-children" onClick={this.decrease}>-</button>
@@ -52,13 +52,18 @@ class Occupants extends React.Component {
           <div className="occupant-tracker">
             <div className="occupant-type">
               <p className="occupant bold">Infants</p>
-              <p>under age 2</p>
+              <p className="occupant">under age 2</p>
             </div>
-            <div className="occupant-type">
+            <div className="occupant-adjustor">
               <button type="button" className="decrement" id="decrease-infants" onClick={this.decrease}>-</button>
               <h2 className="tally">{p.infantsSelected}</h2>
               <button type="button" className="increment" id="increase-infants" onClick={this.increase}>+</button>
             </div>
+          </div>
+        </div>
+        <div id="modal-close-button">
+          <div id="modal-close-button-div">
+            <p className="bold note" id="close-text" onClick={this.props.toggleOccupants}>Close</p>
           </div>
         </div>
       </div>

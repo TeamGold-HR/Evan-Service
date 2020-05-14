@@ -282,11 +282,16 @@ class App extends React.Component {
         alert('The selected check out date must be after the selected check in date.');
       } else {
         document.getElementById('date-2').innerHTML = humanDate;
+        console.log(this.state.firstSelection);
+        console.log(this.state.rent);
+        console.log(this.state.startingRent);
+        console.log(this.state.rent + ((synth[1] - this.state.secondSelection - 1) * (this.state.rent - 35)));
         this.setState({
           secondSelection: synth,
           secondPick: false,
           firstPick: false,
           calModal: false,
+          rent: this.state.rent + ((synth[1] - this.state.firstSelection[1] - 1) * (this.state.rent - 35)),
         });
       }
     } else if (firstPick) {
@@ -399,7 +404,7 @@ class App extends React.Component {
     return (
       <div id="module-zone">
         <div id="top-summary">
-          <h2><span className="bigger">${s.rent}</span> per night</h2>
+          <h2><span className="bigger">${s.startingRent}</span> per night</h2>
         </div>
         <div className="flex-button">
           <button type="button" className="render-button" id="calendar-button" onClick={this.toggleCalendar}>
@@ -426,8 +431,12 @@ class App extends React.Component {
           <button type="button" className="render-button" id="occupant-button" onClick={this.toggleOccupants}>
             <div id="occupant-button-container">
               <div id="total-occupant-tracker">
-                <p className="bold">Guests</p>
-                <p>{`${totalOcc} ${totalOcc > 1 ? 'Guests' : 'Guest'} ${!s.infantsSelected > 0 ? '' : `${s.infantsSelected} ${s.infantsSelected > 1 ? 'Infants' : 'Infant'}`}`}</p>
+                <div>
+                  <p className="bold">Guests</p>
+                </div>
+                <div>
+                  <p>{`${totalOcc} ${totalOcc > 1 ? 'Guests' : 'Guest'} ${!s.infantsSelected > 0 ? '' : `${s.infantsSelected} ${s.infantsSelected > 1 ? 'Infants' : 'Infant'}`}`}</p>
+                </div>
               </div>
               <div id="occupant-modal-button">
                 <p type="button" id="occupant-button-symbol">^</p>
@@ -436,17 +445,20 @@ class App extends React.Component {
           </button>
         </div>
         <div className="hidden" id="occupants-render">
-          <Occupants
-            maxAdults={s.maxAdults}
-            adultsSelected={s.adultsSelected}
-            maxChildren={s.maxChildren}
-            childrenSelected={s.childrenSelected}
-            infantsSelected={s.infantsSelected}
-            maxInfants={s.maxInfants}
-            nonInfants={s.maxNonInfants}
-            increase={this.increase}
-            decrease={this.decrease}
-          />
+          <div id="modal-occupant-position">
+            <Occupants
+              maxAdults={s.maxAdults}
+              adultsSelected={s.adultsSelected}
+              maxChildren={s.maxChildren}
+              childrenSelected={s.childrenSelected}
+              infantsSelected={s.infantsSelected}
+              maxInfants={s.maxInfants}
+              nonInfants={s.maxNonInfants}
+              increase={this.increase}
+              decrease={this.decrease}
+              toggleOccupants={this.toggleOccupants}
+            />
+          </div>
         </div>
         <div className="center-box">
           <button type="button" id="finalize" onClick={this.finalize}>Reserve</button>
@@ -461,6 +473,8 @@ class App extends React.Component {
           cleaning={s.cleaningFee}
           occupancy={s.occupancyFee}
           adults={s.adultsSelected}
+          first={s.firstSelection}
+          second={s.secondSelection}
           childrenSelected={s.childrenSelected}
           toggleNote={this.toggleNote}
           closeModal={this.closeModal}

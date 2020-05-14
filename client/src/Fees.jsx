@@ -28,6 +28,7 @@ class Fees extends React.Component {
     const baseRent = p.startingRent - 35;
     const totalOccupants = p.adults + p.childrenSelected;
     const occupancyFee = totalOccupants * 35;
+    const numDays = (p.first !== '' && p.second !== '') ? (p.second[1] - p.first[1]) : 1;
     return (
       <div id="fees">
         <div className="fee-box">
@@ -36,10 +37,34 @@ class Fees extends React.Component {
         </div>
         <div className="modal" id="rent-note">
           <div className="modal-content">
-            <div id="rent-note-modal">
-              <p>Rent Breakdown:</p>
-              <p>Base Rent per Night: ${baseRent}</p>
-              <p>(Fee per person: $35 x{totalOccupants}) Total Cost of Occupants: ${occupancyFee}</p>
+            <div className="modal-text">
+              <div id="rent-note-modal">
+                <p className="bold under-border">Rent Breakdown:</p>
+                <div className="rent-breakdown under-border">
+                  <div>
+                    <p>Base Rent per Night:</p>
+                  </div>
+                  <div>
+                    <p>${baseRent} x{numDays}</p>
+                  </div>
+                </div>
+                <div className="rent-breakdown under-border">
+                  <div>
+                    <p>Fee per person:</p>
+                  </div>
+                  <div>
+                    <p>$35 x{totalOccupants}</p>
+                  </div>
+                </div>
+                <div className="rent-breakdown">
+                  <div>
+                    <p className="bold">Total Cost:</p>
+                  </div>
+                  <div>
+                    <p className="bold">${occupancyFee + (baseRent * numDays)}</p>
+                  </div>
+                </div>
+              </div>
             </div>
             <div className="modal-top">
               <p><a className="modal-exit-button bold" onClick={this.exit} id="rent-exit">X</a></p>
@@ -52,7 +77,9 @@ class Fees extends React.Component {
         </div>
         <div className="modal" id="service-note">
           <div className="modal-content">
-            <h6>This helps us run our platform and offer services like 24/7 support on your trip.</h6>
+            <div className="modal-text">
+              <p>This helps us run our platform and offer services like 24/7 support on your trip.</p>
+            </div>
             <div className="modal-top">
               <p><a className="modal-exit-button bold" onClick={this.exit} id="service-exit">X</a></p>
             </div>
@@ -64,7 +91,9 @@ class Fees extends React.Component {
         </div>
         <div className="modal" id="cleaning-note">
           <div className="modal-content">
-            <h6>One-time fee charged by host to cover the cost of cleaning their space.</h6>
+            <div className="modal-text">
+              <p>One-time fee charged by host to cover the cost of cleaning their space.</p>
+            </div>
             <div className="modal-top">
               <p><a className="modal-exit-button bold" id="cleaning-exit" onClick={this.exit}>X</a></p>
             </div>
@@ -76,7 +105,9 @@ class Fees extends React.Component {
         </div>
         <div className="modal" id="occupancy-note">
           <div className="modal-content">
-            <h6>Dependent on local taxes of the location you are renting in.</h6>
+            <div className="modal-text">
+              <p>Dependent on local taxes of the location you are renting in.</p>
+            </div>
             <div className="modal-top">
               <p><a className="modal-exit-button bold" onClick={this.exit} id="occupancy-exit">X</a></p>
             </div>
