@@ -6,6 +6,14 @@ const path = require('path');
 const PORT = process.env.PORT || 3007;
 const db = require('../database/index.js');
 
+app.get('*.js', (req, res, next) => {
+  if (req.header('Accept-Encoding').includes('br')) {
+    req.url = req.url + '.br';
+    res.set('Content-Encoding', 'br');
+  }
+  next();
+});
+
 
 app.use(express.json());
 
