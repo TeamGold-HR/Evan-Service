@@ -233,6 +233,7 @@ class App extends React.Component {
       document.getElementById('date-1').innerHTML = 'Add Date';
       document.getElementById('date-2').innerHTML = 'Add Date';
       this.setState({
+        rent: this.state.startingRent,
         calModal: true,
         firstPick: true,
         secondPick: false,
