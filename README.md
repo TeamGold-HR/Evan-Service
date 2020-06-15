@@ -18,23 +18,23 @@ Git clone https://github.com/space-cabin/Evan-Service-Reservations.git
 
 * This module serves the ability for users to select dates and guest numbers for their cabin reservation
 
-[Summary pic](./screenshots/summary.png "summary pic")
+![Summary pic](./screenshots/summary.png "summary pic")
 
 * Clicking on the 'check in/ check out' button will bring up the calendar, allowing a user to select a start and end date for their reservation
 * Clicking an end date that is before the start date (ie start june 5th end june 1st) will prompt an error from the module and ask the user to re-enter their dates.
 
-[calendar](./screenshots/calendar.png "calendar")
+![calendar](./screenshots/calendar.png "calendar")
 
 * Clicking on the 'guests' button will bring up a modal for altering the number of guests the user wishes to bring to their reservation.
 * Altering these values automatically re-calculates the total price of the reservation and displays the breakdown of that price.
 
-[Guest tab](./screenshots/guests.png "guest tab")
+![Guest tab](./screenshots/guests.png "guest tab")
 
-[Price readjust](./screenshots/recalculate.png "Price readjust")
+![Price readjust](./screenshots/recalculate.png "Price readjust")
 
 * Clicking on 'Rent Due', 'Service Fee', 'Cleaning Fee', or 'Occupancy Fee' will bring up modals with additional information about each.
 
-[additional info](./screenshots/additionalInfo.png "additional info")
+![additional info](./screenshots/additionalInfo.png "additional info")
 
 * Clicking the 'Reserve' button will send the information along to be used in final processing of the user's reservation [NOTE: this functionality has not been completed].
 
