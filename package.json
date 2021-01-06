@@ -16,7 +16,7 @@
   "dependencies": {
     "@babel/polyfill": "^7.8.7",
     "@testing-library/react": "^10.0.4",
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "express": "^4.17.1",
     "jest-environment-enzyme": "^7.1.2",
     "jest-enzyme": "^7.1.2",
